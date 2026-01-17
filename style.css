@@ -1,0 +1,448 @@
+:root {
+    --bg-color: #1a1a1d;
+    --sidebar-bg: #2d2d30;
+    --text-color: #e0e0e0;
+    --accent-color: #c3073f;
+    /* Dark Red - War theme */
+    --hover-color: #4e4e50;
+    --border-color: #3e3e42;
+    --success-color: #4CAF50;
+    --primary-color: #2196F3;
+    --input-bg: #333336;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.app-container {
+    display: flex;
+    height: 100%;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 300px;
+    background-color: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-header .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.sidebar-header h2 {
+    font-size: 1.2rem;
+    color: #fff;
+    margin: 0;
+}
+
+.lang-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ccc;
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.lang-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: #fff;
+}
+
+.stats-container {
+    display: flex;
+    gap: 15px;
+    font-size: 0.85rem;
+    color: #bbb;
+    margin-bottom: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.stat-item b {
+    color: var(--primary-color);
+}
+
+.file-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    flex: 1;
+    text-align: center;
+    transition: opacity 0.2s;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.success-btn {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.action-btn {
+    background-color: var(--accent-color);
+    color: white;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.search-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.search-box input,
+.search-filter {
+    width: 100%;
+    padding: 8px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: white;
+}
+
+.search-filter {
+    cursor: pointer;
+}
+
+.search-filter option {
+    background-color: #2c3e50;
+}
+
+.general-list {
+    list-style: none;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.general-list li {
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.general-list li:hover {
+    background-color: var(--hover-color);
+}
+
+.general-list li.active {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.general-list li .gen-id {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-right: 10px;
+}
+
+.delete-btn {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-left: auto;
+    /* Push to right */
+    opacity: 0;
+    /* Hidden by default */
+    transition: opacity 0.2s, transform 0.2s;
+    filter: grayscale(100%) brightness(1.5);
+    /* Make it subtle initially */
+}
+
+.delete-btn:hover {
+    filter: grayscale(0%) brightness(1);
+    /* Full color on hover */
+    transform: scale(1.1);
+}
+
+.general-list li:hover .delete-btn {
+    opacity: 1;
+    /* Show on hover */
+}
+
+.delete-btn:hover {
+    color: #c0392b;
+    transform: scale(1.1);
+}
+
+.empty-state {
+    padding: 20px;
+    text-align: center;
+    font-style: italic;
+    color: #888;
+}
+
+/* Main Content Styling */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.editor-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.video-hidden {
+    visibility: hidden;
+    /* Kept space but hidden until selected */
+}
+
+.editor-header.visible {
+    visibility: visible;
+}
+
+.badge {
+    background-color: #555;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-family: monospace;
+}
+
+.editor-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: #bbb;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 10px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: white;
+    font-family: monospace;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.empty-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: 50px;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+    padding: 15px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    color: #888;
+    background-color: var(--sidebar-bg);
+    margin-top: auto;
+}
+
+.sidebar-footer .credit-link {
+    color: var(--primary-color);
+    font-family: 'Dancing Script', cursive;
+    /* Handwritten Style */
+    font-size: 1.2rem;
+    /* Make it slightly larger */
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.sidebar-footer .credit-link:hover {
+    color: #64b5f6;
+    /* Lighter blue on hover */
+    text-decoration: underline;
+}
+
+/* =========================================
+   MOBILE ADAPTATION (Added for Mobile Ver)
+   ========================================= */
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+    display: none;
+    /* Hidden on Desktop */
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1001;
+    background: #34495e;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+        position: relative;
+    }
+
+    /* Mobile Sidebar Styling */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        /* Hidden by default */
+        width: 80%;
+        /* Takes mostly full width */
+        height: 100%;
+        max-width: 300px;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .sidebar.open {
+        left: 0;
+        /* Fully visible */
+    }
+
+    /* Overlay when sidebar is open */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+
+    .sidebar-overlay.visible {
+        display: block;
+    }
+
+    /* Main Editor Area */
+    .main-editor {
+        width: 100%;
+        padding: 60px 15px 15px 15px;
+        /* Top padding for menu button */
+    }
+
+    /* Show Mobile Menu Button */
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    /* Stack Form Inputs on Mobile (Full Width) */
+    .editor-form {
+        grid-template-columns: 1fr !important;
+        /* Force single column */
+        gap: 15px;
+    }
+
+    /* Larger Touch Targets */
+    .form-group input,
+    .form-group select,
+    .btn {
+        min-height: 44px;
+        /* Apple Human Interface Guidelines */
+        font-size: 16px;
+        /* Prevents auto-zoom on iOS */
+    }
+
+    .form-group label {
+        font-size: 1rem;
+        /* Slightly larger labels */
+    }
+}

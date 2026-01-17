@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EW6: 1914 General Editor (Mobile)</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="lib/jszip.min.js"></script>
+    <!-- Google Fonts for a better look -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <button id="mobileMenuBtn" class="mobile-menu-btn" data-i18n="btn_menu">☰ Menu</button>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="header-top">
+                    <h2 data-i18n="header_generals">Generals</h2>
+                    <button id="langToggle" class="lang-btn" title="Switch Language">TR/EN</button>
+                </div>
+                <div id="statsContainer" class="stats-container" style="display: none;">
+                    <span class="stat-item"><span data-i18n="stats_total">Total</span>: <b id="totalCount">0</b></span>
+                    <span class="stat-item"><span data-i18n="stats_in_shop">In Shop</span>: <b
+                            id="inShopCount">0</b></span>
+                </div>
+                <div class="file-controls">
+                    <button id="newFileBtn" class="btn primary-btn" style="background-color: #e67e22;"
+                        data-i18n="btn_create_new">Create
+                        New</button>
+                </div>
+                <div class="file-controls">
+                    <label for="fileInput" class="btn primary-btn" data-i18n="btn_load_json">Load JSON</label>
+                    <input type="file" id="fileInput" accept=".json" style="display: none;">
+
+                    <label for="apkInput" class="btn primary-btn" style="background-color: #9b59b6;"
+                        data-i18n="btn_load_apk">Load
+                        APK</label>
+                    <input type="file" id="apkInput" accept=".apk" style="display: none;">
+                </div>
+                <div class="file-controls">
+                    <button id="exportBtn" class="btn success-btn" disabled data-i18n="btn_export_json">Export
+                        JSON</button>
+                    <button id="exportApkBtn" class="btn success-btn" style="background-color: #8e44ad;" disabled
+                        data-i18n="btn_export_apk">Export APK</button>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search by ID or Name..." disabled
+                        data-i18n-placeholder="placeholder_search">
+                    <select id="countryFilter" class="search-filter" disabled>
+                        <option value="all" data-i18n="filter_country_all">Filter: Country (All)</option>
+                    </select>
+                </div>
+                <div class="action-controls">
+                    <button id="createGeneralBtn" class="btn action-btn" disabled data-i18n="btn_create_general">+
+                        Create General</button>
+                </div>
+            </div>
+            <ul id="generalList" class="general-list">
+                <!-- List items will be injected here -->
+                <li class="empty-state" data-i18n="msg_no_file">No file loaded.</li>
+            </ul>
+            <div class="sidebar-footer">
+                <p><span data-i18n="footer_developed_by">Developed by</span> <a
+                        href="https://www.youtube.com/@Mainy_1881" target="_blank" class="credit-link">Mainy</a></p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div id="editorHeader" class="editor-header video-hidden">
+                <h2 id="currentGeneralName">Select a General</h2>
+                <span id="currentGeneralId" class="badge"></span>
+            </div>
+            <div id="editorForm" class="editor-form">
+                <div class="empty-message">Please upload a file and select a general to edit.</div>
+            </div>
+        </main>
+    </div>
+
+    <script src="lib/jszip.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
