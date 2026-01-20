@@ -108,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
             msg_select_general: "Bir General Seçin",
             footer_developed_by: "Geliştirici:",
             btn_menu: "☰ Menü",
-            btn_menu: "☰ Menü",
 
             // Logic / Alerts
             alert_unsaved_new: "Kaydedilmemiş değişiklikler kaybolacak. Yeni bir dosya oluşturmak istediğinize emin misiniz?",
@@ -326,8 +325,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const jsonContent = JSON.stringify(generalsData, null, 2); // formatting for safety
             currentZip.file(jsonPathInApk, jsonContent);
 
-            // Generate Blob
-            const blob = await currentZip.generateAsync({ type: "blob" });
+            // Generate Blob with explicit APK MIME type
+            const content = await currentZip.generateAsync({ type: "uint8array" });
+            const blob = new Blob([content], { type: "application/vnd.android.package-archive" });
 
             // Download
             const url = URL.createObjectURL(blob);
