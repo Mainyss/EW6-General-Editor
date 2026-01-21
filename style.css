@@ -430,6 +430,7 @@ body {
         grid-template-columns: 1fr !important;
         /* Force single column */
         gap: 15px;
+        padding-bottom: 150px; /* Extra scroll space for mobile */
     }
 
     /* Larger Touch Targets */
