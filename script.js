@@ -19,6 +19,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalCountEl = document.getElementById('totalCount');
     const inShopCountEl = document.getElementById('inShopCount');
 
+    // Mobile Specific Elements
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.querySelector('.sidebar');
+
+    // Create Overlay for Mobile
+    const overlay = document.createElement('div');
+    overlay.className = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+
     // State
     let generalsData = [];
     let selectedGeneralIndex = null;
@@ -26,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentZip = null;
     let jsonPathInApk = null;
 
-    // Language State
     // Language State
     let currentLang = 'en';
 
@@ -158,20 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
     countryFilter.addEventListener('change', () => renderList(searchInput.value));
     langToggle.addEventListener('click', toggleLanguage);
 
-    // Mobile Sidebar Logic (Mobile Project Only)
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const sidebar = document.querySelector('.sidebar');
-
-    // Create Overlay dynamically
-    const overlay = document.createElement('div');
-    overlay.className = 'sidebar-overlay';
-    document.body.appendChild(overlay);
-
-    function toggleSidebar() {
-        sidebar.classList.toggle('open');
-        overlay.classList.toggle('visible');
-    }
-
+    // Mobile Sidebar Listeners
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', toggleSidebar);
     }
@@ -182,6 +177,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function t(key) {
         return TRANSLATIONS[currentLang][key] || key;
+    }
+
+    // Toggle Sidebar Function
+    function toggleSidebar() {
+        sidebar.classList.toggle('open');
+        if (sidebar.classList.contains('open')) {
+            overlay.classList.add('visible');
+        } else {
+            overlay.classList.remove('visible');
+        }
     }
 
     function toggleLanguage() {
@@ -198,8 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateLanguageToggleBtn() {
-        // Show CURRENT language to avoid confusion (User feedback: "In TR there is English")
-        // Previously showed target language. Now showing active language code.
+        // Show CURRENT language
         langToggle.textContent = currentLang.toUpperCase();
     }
 
@@ -247,6 +251,10 @@ document.addEventListener('DOMContentLoaded', () => {
         editorHeader.classList.add('video-hidden');
 
         populateCountryFilter(); // Reset filter
+
+        if (window.innerWidth <= 768) {
+            toggleSidebar(); // Close sidebar on mobile
+        }
     }
 
     // APK Upload Handler
@@ -305,6 +313,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(`${t('alert_apk_success')} ${foundPath}`);
                 log(`${t('alert_apk_success')} ${file.name}`); // Localized log
 
+                if (window.innerWidth <= 768) {
+                    toggleSidebar();
+                }
+
             } catch (error) {
                 console.error(error);
                 alert(t('alert_apk_error'));
@@ -313,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.readAsArrayBuffer(file);
     }
 
-    // Export APK Handler
+    // Export APK Handler (Mobile Fix Applied)
     async function handleApkExport() {
         if (!currentZip || !jsonPathInApk) {
             alert(t('alert_no_apk_export'));
@@ -391,7 +403,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     editorHeader.classList.remove('visible');
                     editorHeader.classList.add('video-hidden');
                 }
-                log(`${t('alert_apk_success')} ${file.name}`); // Reusing "Loaded successfully" message for JSON log
+                log(`${t('alert_apk_success')} ${file.name}`);
+
+                if (window.innerWidth <= 768) {
+                    toggleSidebar();
+                }
             } catch (error) {
                 console.error(error);
                 alert(t('alert_json_error'));
@@ -432,9 +448,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // Country Filter
             if (selectedCountry !== 'all') {
                 const cVal = Number(selectedCountry);
-                if (!gen.Country || !Array.isArray(gen.Country) || !gen.Country.includes(cVal)) {
-                    return;
+                // Support both Array (1914) and Number (1804)
+                let match = false;
+                if (gen.Country) {
+                    if (Array.isArray(gen.Country) && gen.Country.includes(cVal)) {
+                        match = true;
+                    } else if (typeof gen.Country === 'number' && gen.Country === cVal) {
+                        match = true;
+                    }
                 }
+
+                if (!match) return;
             }
 
             const li = document.createElement('li');
@@ -465,6 +489,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             li.addEventListener('click', () => {
                 selectGeneral(originalIndex);
+                if (window.innerWidth <= 768) {
+                    toggleSidebar(); // Auto-close sidebar on select mobile
+                }
             });
 
             if (originalIndex === selectedGeneralIndex) {
@@ -641,9 +668,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (typeof value === 'number') {
                 input = document.createElement('input');
                 input.type = 'number';
+                input.setAttribute('inputmode', 'numeric'); // Mobile numeric keyboard
                 input.value = value;
-                // Optimization for Mobile: Show numeric keyboard
-                input.setAttribute('inputmode', 'numeric');
                 input.addEventListener('change', (e) => {
                     general[key] = Number(e.target.value);
                     updateStats();
@@ -679,7 +705,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "Id": 0,
             "Name": "New General",
             "EName": "New General",
-            "Country": [], // Empty by default
+            "Country": [], // Empty by default per user request
             "ArmyType": 1,
             "Quality": 1,
             "InitTitleLv": 1,
@@ -723,6 +749,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Scroll list to bottom
         generalList.scrollTop = generalList.scrollHeight;
         log(`Created new general ID: ${newGeneral.Id}`);
+
+        if (window.innerWidth <= 768) {
+            toggleSidebar(); // Close sidebar on mobile
+        }
     }
 
     // Export Logic
@@ -766,8 +796,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const countries = new Set();
         generalsData.forEach(gen => {
-            if (gen.Country && Array.isArray(gen.Country)) {
-                gen.Country.forEach(c => countries.add(c));
+            if (gen.Country) {
+                if (Array.isArray(gen.Country)) {
+                    gen.Country.forEach(c => countries.add(c));
+                } else if (typeof gen.Country === 'number') {
+                    countries.add(gen.Country);
+                }
             }
         });
 
@@ -821,7 +855,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('beforeunload', (e) => {
         if (generalsData.length > 0) {
             e.preventDefault();
-            e.returnValue = ''; // Standard for Chrome/Firefox
+            e.returnValue = '';
         }
     });
+
 });
